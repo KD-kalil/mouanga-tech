@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="900" viewBox="0 0 720 900" role="img" aria-labelledby="title desc">
+  <title id="title">Illustration du téléphone iPhone 11 rouge</title>
+  <desc id="desc">Illustration originale des faces avant et arrière d'un téléphone rouge. Ce n'est pas une photo du produit en vente.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#f8fafc"/>
+      <stop offset="1" stop-color="#e7edf5"/>
+    </linearGradient>
+    <linearGradient id="red" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#ff6565"/>
+      <stop offset="1" stop-color="#b51232"/>
+    </linearGradient>
+    <linearGradient id="screen" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#ffc0c9"/>
+      <stop offset=".48" stop-color="#ed315c"/>
+      <stop offset="1" stop-color="#7b183e"/>
+    </linearGradient>
+    <filter id="shadow" x="-.3" y="-.2" width="1.7" height="1.6">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#27334a" flood-opacity=".2"/>
+    </filter>
+  </defs>
+  <rect width="720" height="900" rx="38" fill="url(#background)"/>
+  <circle cx="602" cy="142" r="95" fill="#fff" opacity=".55"/>
+  <ellipse cx="360" cy="746" rx="244" ry="36" fill="#9aa7ba" opacity=".22"/>
+  <g filter="url(#shadow)" transform="rotate(-8 355 445)">
+    <rect x="139" y="194" width="266" height="500" rx="40" fill="#262b34"/>
+    <rect x="146" y="201" width="252" height="486" rx="34" fill="url(#red)"/>
+    <rect x="158" y="213" width="99" height="100" rx="24" fill="#b80e2d" opacity=".8"/>
+    <circle cx="188" cy="244" r="19" fill="#171a21" stroke="#424955" stroke-width="5"/>
+    <circle cx="231" cy="283" r="19" fill="#171a21" stroke="#424955" stroke-width="5"/>
+    <circle cx="231" cy="241" r="7" fill="#f3e7d2"/>
+    <circle cx="266" cy="449" r="36" fill="#fff" opacity=".16"/>
+    <rect x="422" y="194" width="266" height="500" rx="40" fill="#242832"/>
+    <rect x="430" y="202" width="250" height="484" rx="34" fill="#101620"/>
+    <rect x="440" y="212" width="230" height="464" rx="27" fill="url(#screen)"/>
+    <path d="M440 385c82-66 157 91 230 21v130c-67 81-160-80-230-11z" fill="#ffb5a4" opacity=".55"/>
+    <path d="M440 520c67-77 143 84 230-18v92c-83 72-155-78-230-9z" fill="#ffd7a3" opacity=".42"/>
+    <rect x="512" y="214" width="86" height="18" rx="9" fill="#101620"/>
+  </g>
+  <rect x="194" y="768" width="332" height="44" rx="22" fill="#fff" opacity=".84"/>
+  <text x="360" y="797" text-anchor="middle" fill="#354054" font-family="Arial, sans-serif" font-size="17" font-weight="700" letter-spacing="2">ILLUSTRATION DU MODÈLE</text>
+</svg>

@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Découvrez les téléphones, accessoires, parfums et articles luxe proposés par MOUANGA TECH.">
+    <meta name="theme-color" content="#0f1150">
+    <title>MOUANGA TECH</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: radial-gradient(ellipse at top, #1a215f 0, #0b1034 45%, #080b20 100%);
+            color: #f7f8ff;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        .entete {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(120deg, #ff6a00 0%, #ef3975 55%, #8c38bc 100%);
+            padding: 44px 20px 38px;
+            text-align: center;
+        }
+        .entete::before,
+        .entete::after {
+            content: "";
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .entete::before {
+            top: -150px;
+            left: calc(50% - 360px);
+        }
+        .entete::after {
+            right: calc(50% - 390px);
+            bottom: -180px;
+            width: 300px;
+            height: 300px;
+        }
+        .entete h1 {
+            position: relative;
+            margin: 0;
+            color: #fff;
+            font-size: clamp(32px, 6vw, 54px);
+            font-weight: 800;
+            letter-spacing: 0.08em;
+        }
+        .entete h1 span {
+            color: #ffe3b8;
+        }
+        .entete p {
+            position: relative;
+            margin: 10px 0 0;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 15px;
+            letter-spacing: 0.03em;
+        }
+        .produit, .panier-box {
+            background: linear-gradient(155deg, #1c2349, #151a35);
+            color: #f7f8ff;
+            border: 1px solid rgba(255, 255, 255, 0.09);
+            border-radius: 18px;
+        }
+        .prix {
+            color: #ffc46b;
+            font-weight: bold;
+            font-size: 17px;
+        }
+        button {
+            font: inherit;
+            background: linear-gradient(110deg, #ff7317, #f64c62);
+            color: #fff;
+            padding: 11px 18px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 700;
+            transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+        }
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 7px 18px rgba(255, 106, 0, 0.22);
+            filter: brightness(1.06);
+        }
+        button:focus-visible,
+        input:focus-visible,
+        a:focus-visible {
+            outline: 3px solid #ffd08a;
+            outline-offset: 3px;
+        }
+        .barre {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: rgba(8, 12, 39, 0.92);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 12px max(16px, calc((100% - 1120px) / 2));
+            backdrop-filter: blur(14px);
+        }
+        #recherche {
+            width: 100%;
+            display: block;
+            padding: 13px 18px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 14px;
+            background: #fff;
+            color: #1b2032;
+            font-size: 16px;
+        }
+        .menu {
+            display: flex;
+            gap: 9px;
+            overflow-x: auto;
+            margin-top: 12px;
+            padding: 2px 2px 5px;
+            scrollbar-width: thin;
+        }
+        .menu button {
+            flex: none;
+            background: #1a2044;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 9px 14px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: none;
+        }
+        .menu button:hover,
+        .menu button.actif {
+            background: #ff6a00;
+            border-color: #ff8a39;
+            transform: none;
+        }
+        .grille {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+            padding: 18px 20px 36px;
+            max-width: 1160px;
+            margin: 0 auto;
+        }
+        .grille .produit {
+            max-width: none;
+            margin: 0;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.16);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+        .grille .produit:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 157, 85, 0.55);
+            box-shadow: 0 18px 34px rgba(0, 0, 0, 0.3);
+        }
+        .photo {
+            position: relative;
+            height: auto;
+            aspect-ratio: 1 / 1;
+            background: linear-gradient(145deg, #fff, #edf1f8);
+            border-radius: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .photo img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .photo[data-erreur]::after {
+            content: attr(data-erreur);
+            color: #596275;
+            padding: 14px;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+        }
+        .grille h3 {
+            font-size: 16px;
+            line-height: 1.35;
+            margin: 14px 2px 6px;
+        }
+        .grille .produit button {
+            width: 100%;
+            margin-top: auto;
+            padding: 11px 8px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        .desc {
+            font-size: 12px;
+            line-height: 1.5;
+            color: #b7bfd3;
+            margin: 0 2px 8px;
+            min-height: 18px;
+        }
+        .panier-box {
+            max-width: 1120px;
+            margin: 0 auto 34px;
+            padding: 18px 22px;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            align-items: center;
+            gap: 12px 22px;
+        }
+        #panier {
+            grid-column: 1 / -1;
+            margin: 0;
+            font-weight: 700;
+        }
+        #liste {
+            grid-column: 1 / -1;
+            margin: 0;
+            padding-left: 20px;
+            color: #d7dced;
+        }
+        #soustotal,
+        #livraison,
+        #somme {
+            margin: 0;
+        }
+        #somme {
+            color: #ffc46b;
+            font-weight: 700;
+        }
+        .choix-livraison {
+            grid-column: 1 / -1;
+            display: grid;
+            gap: 10px;
+            margin: 0;
+            padding: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+        }
+        .choix-livraison legend {
+            padding: 0 6px;
+            font-weight: 700;
+        }
+        .choix-livraison label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #d7dced;
+            cursor: pointer;
+        }
+        .choix-livraison input {
+            accent-color: #ff7317;
+        }
+        .options-commande {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+        .options-commande button {
+            cursor: pointer;
+        }
+        .options-commande button:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+            filter: grayscale(0.45);
+        }
+        .note-whatsapp {
+            grid-column: 1 / -1;
+            margin: 0;
+            color: #b7bfd3;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        .titre-section {
+            max-width: 1120px;
+            margin: 30px auto 4px;
+            padding: 0 20px;
+            color: #ff9a4f;
+            font-size: 26px;
+        }
+        .intro-section {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 0 20px;
+            color: #b7bfd3;
+            font-size: 14px;
+        }
+        #avertissement-videos {
+            max-width: 1080px;
+            margin: 12px auto 0;
+            padding: 12px 16px;
+            border: 1px solid rgba(255, 154, 79, 0.45);
+            border-radius: 10px;
+            background: rgba(255, 154, 79, 0.1);
+            color: #ffe0c5;
+            line-height: 1.5;
+        }
+        #avertissement-videos[hidden] {
+            display: none;
+        }
+        .galerie {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            padding: 16px max(20px, calc((100% - 1120px) / 2)) 32px;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: thin;
+        }
+        .carte-video {
+            flex: none;
+            width: min(280px, 78vw);
+            scroll-snap-align: start;
+            background: #171d3c;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 10px;
+        }
+        .carte-video video {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            border-radius: 11px;
+            background: #000;
+        }
+        .carte-video p {
+            margin: 9px 2px 0;
+            font-size: 14px;
+        }
+        .carte-video .erreur-video {
+            color: #ffc3b5;
+            line-height: 1.5;
+            font-size: 12px;
+        }
+        .carte-video .erreur-video[hidden] {
+            display: none;
+        }
+        @media (max-width: 680px) {
+            .entete {
+                padding: 34px 16px 30px;
+            }
+            .grille {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 12px;
+                padding: 14px 12px 28px;
+            }
+            .grille .produit {
+                padding: 9px;
+                border-radius: 14px;
+            }
+            .photo {
+                border-radius: 10px;
+            }
+            .grille h3 {
+                font-size: 14px;
+                margin-top: 10px;
+            }
+            .desc {
+                font-size: 11px;
+            }
+            .grille .produit button {
+                font-size: 12px;
+            }
+            .panier-box {
+                grid-template-columns: 1fr 1fr;
+                margin: 0 12px 26px;
+                padding: 15px;
+                gap: 12px;
+            }
+            #panier,
+            #liste {
+                grid-column: 1 / -1;
+            }
+            .titre-section {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="entete">
+        <h1>MOUANGA <span>TECH</span></h1>
+        <p>Téléphones • Accessoires • Montres • Sandales • Parfums</p>
+    </header>
+
+    <div class="barre" aria-label="Recherche et catégories">
+        <input type="search" id="recherche" aria-label="Rechercher un produit" placeholder="🔍 Rechercher un produit..." oninput="afficherProduits()">
+        <nav class="menu" aria-label="Catégories de produits">
+            <button type="button" class="actif" aria-pressed="true" data-categorie="Tous" onclick="filtrer('Tous')">Tous</button>
+            <button type="button" aria-pressed="false" data-categorie="iPhone" onclick="filtrer('iPhone')">📱 iPhone</button>
+            <button type="button" aria-pressed="false" data-categorie="Samsung" onclick="filtrer('Samsung')">📱 Samsung</button>
+            <button type="button" aria-pressed="false" data-categorie="Accessoires" onclick="filtrer('Accessoires')">🎧 Accessoires</button>
+            <button type="button" aria-pressed="false" data-categorie="Montres" onclick="filtrer('Montres')">⌚ Montres</button>
+            <button type="button" aria-pressed="false" data-categorie="Chaussures" onclick="filtrer('Chaussures')">👟 Sandales</button>
+            <button type="button" aria-pressed="false" data-categorie="Parfums" onclick="filtrer('Parfums')">🌸 Parfums</button>
+        </nav>
+    </div>
+
+    <main>
+        <h2 class="titre-section">Nos produits</h2>
+        <p class="intro-section">Téléphones, parfums et accessoires sélectionnés par MOUANGA TECH. Retrait gratuit ou Livraison : 1 000 FCFA par commande.</p>
+        <div class="grille" id="catalogue"></div>
+
+        <section class="panier-box" aria-label="Votre panier">
+            <p id="panier">Panier : 0 article</p>
+            <ul id="liste"></ul>
+            <p id="soustotal">Sous-total : 0 FCFA</p>
+            <p id="livraison">Retrait : gratuit</p>
+            <p id="somme">Total : 0 FCFA</p>
+            <fieldset class="choix-livraison">
+                <legend>Comment souhaitez-vous recevoir votre commande ?</legend>
+                <label><input type="radio" name="mode-livraison" value="retrait" checked> Retrait — gratuit</label>
+                <label><input type="radio" name="mode-livraison" value="livraison"> Livraison — 1 000 FCFA</label>
+            </fieldset>
+            <div class="options-commande" aria-label="Choisir une application de messagerie">
+                <button type="button" onclick="commander('whatsapp')" disabled>Commander par WhatsApp</button>
+            </div>
+        </section>
+
+        <section id="zone-videos" aria-labelledby="titre-videos">
+            <h2 class="titre-section" id="titre-videos">Vidéos de la boutique</h2>
+            <p class="intro-section">Découvrez nos produits en vidéo.</p>
+            <p id="avertissement-videos" hidden role="status">Cette page est ouverte comme un fichier local. Pour lire les vidéos, lancez le site avec un serveur local (par exemple l’extension Live Server de VS Code) ou ouvrez-le depuis son hébergement web.</p>
+            <div class="galerie" id="galerie"></div>
+        </section>
+    </main>
+
+    <script>
+        const NUMERO = "242065613324";
+        const FRAIS_LIVRAISON = 1000;
+        const DOSSIER = "";
+        let categorieActive = "Tous";
+        let articles = [];
+        let modeLivraison = "retrait";
+
+        const produits = [
+            { nom: "Monte Leone Voyager", desc: "Eau de Parfum, 3.4 FL.OZ", prix: 15000, cat: "Parfums", photo: "WhatsApp Image 2026-11-10 at 14.05.01 (2).jpeg" },
+            { nom: "Matelot", desc: "Eau de Parfum - Frais", prix: 18000, cat: "Parfums", photo: "WhatsApp Image 2026-11-10 at 14.05.06 (1).jpeg" },
+            { nom: "Night Club Absolute", desc: "Eau de Parfum, 100 ml", prix: 20000, cat: "Parfums", photo: "WhatsApp Image 2026-11-10 at 14.05.06.jpeg" },
+            { nom: "Intense Noir", desc: "Le Parfum, 100 ml", prix: 17000, cat: "Parfums", photo: "WhatsApp Image 2026-11-10 at 14.05.07.jpeg" },
+            { nom: "Avant Intense", desc: "Eau de Parfum, 100 ml", prix: 12000, cat: "Parfums", photo: "WhatsApp Image 2026-11-10 at 14.05.07 (1).jpeg" },
+            { nom: "Lattafa Khamrah", desc: "Eau de Parfum, 100 ml", prix: 20000, cat: "Parfums", photo: "WhatsApp Image 2026-11-10 at 14.05.07 (2).jpeg" },
+            { nom: "Mystère", desc: "Eau de Parfum", prix: 12000, cat: "Parfums", photo: "WhatsApp Image 2026-11-10 at 14.05.01 (1).jpeg" },
+            { nom: "Memories Born in Paris", desc: "Eau de Parfum", prix: 15000, cat: "Parfums", photo: "WhatsApp Image 2026-11-10 at 14.05.01.jpeg" },
+            { nom: "iPhone 12 Pro Max", desc: "256 Go, Grade A+", prix: 155000, cat: "iPhone", photo: "WhatsApp Image 2026-11-10 at 14.15.48.jpeg" },
+            { nom: "iPhone 11", desc: "Illustration du modèle", prix: 95000, cat: "iPhone", photo: "iphone-11.svg" },
+            { nom: "iPhone 14", desc: "Illustration du modèle", prix: 195000, cat: "iPhone", photo: "iphone-14.svg" },
+            { nom: "iPhone 12 mini", desc: "Coloris vert et blanc", prix: 95000, cat: "iPhone", photo: "WhatsApp Image 2026-11-10 at 14.15.49.jpeg" },
+            { nom: "Samsung Galaxy A54 5G", desc: "128 Go", prix: 150000, prixEstime: true, cat: "Samsung", photo: "Samsung A54 5G.jpeg" },
+            { nom: "Écouteurs Bluetooth", desc: "Boîtier de recharge inclus", prix: 10000, prixEstime: true, cat: "Accessoires", photo: "Ecouteurs.jpeg" },
+            { nom: "Montre Tissot PRX", desc: "Cadran noir", prix: 17000, cat: "Montres", photo: "WhatsApp Image 2026-11-10 at 14.05.00.jpeg" },
+            { nom: "Montre Tissot PRX verte", desc: "Cadran vert", prix: 17000, prixEstime: true, cat: "Montres", photo: "WhatsApp Image 2026-11-10 at 14.05.00.jpeg" },²
+            { nom: "Sandales Hermès", desc: "Noir et détail doré", prix: 14000, cat: "Chaussures", photo: "WhatsApp Image 2026-11-10 at 14.05.00 (1).jpeg" },
+            { nom: "Sandales Cedis", desc: "Coloris orange", prix: 18000, cat: "Chaussures", photo: "WhatsApp Image 2026-11-10 at 14.05.00 (2).jpeg" }
+        ];
+
+        const videos = [
+            { titre: "Vidéo 1 · 14:04:58", fichier: "WhatsApp Video 2026-11-10 at 14.04.58.mp4" },
+            { titre: "Vidéo 2 · 14:05:05", fichier: "WhatsApp Video 2026-11-10 at 14.05.05.mp4" },
+            { titre: "Vidéo 3 · 14:15:40", fichier: "WhatsApp Video 2026-11-10 at 14.15.40.mp4" },
+            { titre: "Vidéo 4 · 14:15:42", fichier: "WhatsApp Video 2026-11-10 at 14.15.42.mp4" },
+            { titre: "Vidéo 5 · 14:15:43", fichier: "WhatsApp Video 2026-11-10 at 14.15.43.mp4" },
+            { titre: "Vidéo 6 · 14:15:45", fichier: "WhatsApp Video 2026-11-10 at 14.15.45.mp4" },
+            { titre: "Vidéo 7 · 14:15:47", fichier: "WhatsApp Video 2026-11-10 at 14.15.47.mp4" }
+        ];
+
+        function ajouter(nom, prix) {
+            articles.push({ nom: nom, prix: prix });
+            afficher();
+        }
+
+        function afficher() {
+            let liste = "";
+            let sousTotal = 0;
+            for (let i = 0; i < articles.length; i++) {
+                liste = liste + "<li>" + articles[i].nom + " - " + articles[i].prix.toLocaleString("fr-FR") + " FCFA</li>";
+                sousTotal = sousTotal + articles[i].prix;
+            }
+            const fraisLivraison = modeLivraison == "livraison" && articles.length > 0 ? FRAIS_LIVRAISON : 0;
+            const total = sousTotal + fraisLivraison;
+            document.getElementById("panier").innerText = "Panier : " + articles.length + " article(s)";
+            document.getElementById("liste").innerHTML = liste;
+            document.getElementById("soustotal").innerText = "Sous-total : " + sousTotal.toLocaleString("fr-FR") + " FCFA";
+            document.getElementById("livraison").innerText = fraisLivraison > 0
+                ? "Livraison : " + fraisLivraison.toLocaleString("fr-FR") + " FCFA"
+                : "Retrait : gratuit";
+            document.getElementById("somme").innerText = "Total : " + total.toLocaleString("fr-FR") + " FCFA";
+            const boutonsCommande = document.querySelectorAll(".options-commande button");
+            for (let i = 0; i < boutonsCommande.length; i++) {
+                boutonsCommande[i].disabled = articles.length == 0;
+            }
+        }
+
+        function commander(application) {
+            if (articles.length == 0) {
+                alert("Votre panier est vide !");
+                return;
+            }
+            if (application != "whatsapp" && application != "business") {
+                return;
+            }
+            let message = "Bonjour, je veux commander :\n";
+            let sousTotal = 0;
+            for (let i = 0; i < articles.length; i++) {
+                message = message + "- " + articles[i].nom + " : " + articles[i].prix.toLocaleString("fr-FR") + " FCFA\n";
+                sousTotal = sousTotal + articles[i].prix;
+            }
+            const fraisLivraison = modeLivraison == "livraison" ? FRAIS_LIVRAISON : 0;
+            const total = sousTotal + fraisLivraison;
+            message = message + "\nSous-total : " + sousTotal.toLocaleString("fr-FR") + " FCFA";
+            message = message + (fraisLivraison > 0
+                ? "\nLivraison : " + fraisLivraison.toLocaleString("fr-FR") + " FCFA"
+                : "\nRetrait : gratuit");
+            message = message + "\nTotal à payer : " + total.toLocaleString("fr-FR") + " FCFA";
+            const texteEncode = encodeURIComponent(message);
+            const url = application == "business"
+                ? "https://api.whatsapp.com/send?phone=" + NUMERO + "&text=" + texteEncode
+                : "https://wa.me/" + NUMERO + "?text=" + texteEncode;
+            window.open(url, "_blank", "noopener");
+        }
+
+        function ajouterProduit(i) {
+            ajouter(produits[i].nom, produits[i].prix);
+        }
+
+        function reserver(i) {
+            let message = "Bonjour, je veux réserver : " + produits[i].nom;
+            window.open("https://wa.me/" + NUMERO + "?text=" + encodeURIComponent(message));
+        }
+
+        function demanderPrix(i) {
+            let message = "Bonjour, quel est le prix de : " + produits[i].nom + " ?";
+            window.open("https://wa.me/" + NUMERO + "?text=" + encodeURIComponent(message));
+        }
+
+        function filtrer(cat) {
+            categorieActive = cat;
+            const boutons = document.querySelectorAll(".menu button");
+            for (let i = 0; i < boutons.length; i++) {
+                const actif = boutons[i].dataset.categorie == cat;
+                boutons[i].classList.toggle("actif", actif);
+                boutons[i].setAttribute("aria-pressed", actif);
+            }
+            afficherProduits();
+        }
+
+        function simplifier(t) {
+            return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        }
+        
+        function afficherProduits() {
+            let texte = simplifier(document.getElementById("recherche").value);
+            let html = "";
+            for (let i = 0; i < produits.length; i++) {
+                let p = produits[i];
+                let bonneCat = (categorieActive == "Tous" || p.cat == categorieActive);
+                let bonTexte = simplifier(p.nom).includes(texte);
+                if (bonneCat && bonTexte) {
+                    let prix = "Prix sur demande";
+                    let bouton = `<button onclick="demanderPrix(${i})">Demander le prix</button>`;
+                    if (p.prix > 0) {
+                        prix = p.prix.toLocaleString("fr-FR") + " FCFA";
+                        bouton = `<button onclick="ajouterProduit(${i})">Ajouter au panier</button>`;
+                    }
+                    if (p.prixEstime && p.prix > 0) {
+                        prix = "Prix indicatif : " + prix;
+                    }
+                    if (p.service) {
+                        bouton = `<button onclick="reserver(${i})">Réserver</button>`;
+                        if (p.prix > 0) {
+                            prix = "dès " + prix;
+                        }
+                    }
+                    html = html + `
+                        <div class="produit">
+                            <div class="photo"${p.photo ? "" : ' data-erreur="Photo à ajouter"'}>
+                                ${p.photo ? `<img src="${DOSSIER}${p.photo}" alt="${p.nom}" style="object-position: ${p.pos || 'center' }" loading="lazy" decoding="async" onerror="this.style.display='none'; this.parentElement.setAttribute('data-erreur', 'Photo bientôt disponible')">` : ""}
+                            </div>
+                            <h3>${p.nom}</h3>
+                            <p class="desc">${p.desc || ""}</p>
+                            <p class="prix">${prix}</p>
+                            ${bouton}
+                        </div>`;
+                }
+            }
+            if (html == "") {
+                html = "<p>Aucun produit trouvé.</p>";
+            }
+            document.getElementById("catalogue").innerHTML = html;
+        }
+
+        function afficherVideos() {
+            let html = "";
+            for (let i = 0; i < videos.length; i++) {
+                html = html + `
+                    <div class="carte-video">
+                        <video controls muted playsinline preload="metadata" onerror="this.parentElement.querySelector('.erreur-video').hidden = false">
+                            <source src="${DOSSIER}${encodeURIComponent(videos[i].fichier)}" type="video/mp4">
+                        </video>
+                        <p>${videos[i].titre}</p>
+                        <p class="erreur-video" hidden>Lecture impossible dans ce navigateur. Vérifie le fichier vidéo ou essaie de le convertir en MP4 H.264.</p>
+                    </div>`;
+            }
+            document.getElementById("galerie").innerHTML = html;
+            if (videos.length == 0) {
+                document.getElementById("zone-videos").style.display = "none";
+            }
+        }
+
+        document.querySelectorAll('input[name="mode-livraison"]').forEach(function (option) {
+            option.addEventListener("change", function () {
+                modeLivraison = option.value;
+                afficher();
+            });
+        });
+
+        afficherProduits();
+        afficherVideos();
+        if (window.location.protocol === "file:") {
+            document.getElementById("avertissement-videos").hidden = false;
+        }
+    </script>
+
+</body>
+</html>
